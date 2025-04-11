@@ -32,10 +32,28 @@ import {
   MenuItem,
   Link,
   SelectChangeEvent,
+  FormControl,
+  InputLabel,
+  CardContent,
 } from '@mui/material';
 import { useTheme, Theme } from '@mui/material/styles';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-import { Person, Lock, Email } from '@mui/icons-material';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer
+} from 'recharts';
+import {
+  FitnessCenter,
+  Restaurant,
+  Science,
+  TrendingUp,
+  Support,
+  CheckCircle,
+  ArrowBack
+} from '@mui/icons-material';
 
 interface FormData {
   height: string;
@@ -896,153 +914,76 @@ function App() {
   );
 
   const renderProgramStep = () => (
-    <Fade in={currentStep === 'program'}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ 
-        minHeight: '100vh',
-        background: `linear-gradient(135deg, #030712 0%, #111827 100%)`,
-        position: 'relative',
-        overflowX: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '100%',
-          background: 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%)',
-          pointerEvents: 'none',
-          animation: 'pulse 8s ease-in-out infinite'
-        },
-        '@keyframes pulse': {
-          '0%, 100%': {
-            opacity: 0.5,
-          },
-          '50%': {
-            opacity: 0.8,
-          },
-        }
+        display: 'grid',
+        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
+        gap: 3
       }}>
-        <Container maxWidth="lg" sx={{ py: 8 }}>
-          <Stack spacing={6}>
-            <Box textAlign="center">
-              <Typography 
-                variant="h3" 
-                sx={{ 
-                  fontWeight: 700,
-                  background: 'linear-gradient(45deg, #60A5FA 30%, #34D399 90%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  mb: 2 
-                }}
-              >
-                Your Growth Program
+        {[
+          {
+            title: 'Daily Protocol',
+            description: 'Your daily growth routine and activities',
+            icon: <FitnessCenter sx={{ fontSize: 40 }} />,
+            onClick: () => setCurrentStep('daily')
+          },
+          {
+            title: 'Weekly Program',
+            description: 'Weekly growth exercises and progress tracking',
+            icon: <TrendingUp sx={{ fontSize: 40 }} />,
+            onClick: () => setCurrentStep('weekly')
+          },
+          {
+            title: 'Nutrition Plan',
+            description: 'Growth-optimizing diet and supplements',
+            icon: <Restaurant sx={{ fontSize: 40 }} />,
+            onClick: () => setCurrentStep('nutrition')
+          },
+          {
+            title: 'Growth Techniques',
+            description: 'Advanced methods for maximizing growth',
+            icon: <Science sx={{ fontSize: 40 }} />,
+            onClick: () => setCurrentStep('techniques')
+          },
+          {
+            title: 'Progress Tracking',
+            description: 'Monitor your growth journey',
+            icon: <CheckCircle sx={{ fontSize: 40 }} />,
+            onClick: () => setCurrentStep('progress')
+          },
+          {
+            title: 'Expert Support',
+            description: 'Get personalized guidance',
+            icon: <Support sx={{ fontSize: 40 }} />,
+            onClick: () => setCurrentStep('support')
+          }
+        ].map((program, index) => (
+          <Card 
+            key={index}
+            onClick={program.onClick}
+            sx={{ 
+              cursor: 'pointer',
+              transition: 'transform 0.2s',
+              '&:hover': {
+                transform: 'scale(1.02)'
+              }
+            }}
+          >
+            <CardContent sx={{ textAlign: 'center' }}>
+              <Box sx={{ mb: 2 }}>
+                {program.icon}
+              </Box>
+              <Typography variant="h5" component="h2" gutterBottom>
+                {program.title}
               </Typography>
-              <Typography color="#94A3B8" sx={{ maxWidth: 600, mx: 'auto' }}>
-                Choose which aspect of the program you want to focus on today
+              <Typography color="text.secondary">
+                {program.description}
               </Typography>
-            </Box>
-
-            <Grid container spacing={4}>
-              {[
-                {
-                  title: "Daily Protocol",
-                  description: "Your daily growth optimization routine",
-                  icon: "📅",
-                  color: "#60A5FA",
-                  onClick: () => setCurrentStep('daily')
-                },
-                {
-                  title: "Weekly Program",
-                  description: "Structured weekly growth plan",
-                  icon: "📊",
-                  color: "#34D399",
-                  onClick: () => setCurrentStep('weekly')
-                },
-                {
-                  title: "Nutrition Plan",
-                  description: "Growth-optimizing diet and supplements",
-                  icon: "🥗",
-                  color: "#F59E0B",
-                  onClick: () => setCurrentStep('nutrition')
-                },
-                {
-                  title: "Growth Techniques",
-                  description: "Advanced height optimization methods",
-                  icon: "💪",
-                  color: "#8B5CF6",
-                  onClick: () => setCurrentStep('techniques')
-                },
-                {
-                  title: "Progress Tracking",
-                  description: "Monitor your growth journey",
-                  icon: "📈",
-                  color: "#EC4899",
-                  onClick: () => setCurrentStep('progress')
-                },
-                {
-                  title: "Expert Support",
-                  description: "Get help from our specialists",
-                  icon: "👨‍🔬",
-                  color: "#6366F1",
-                  onClick: () => setCurrentStep('support')
-                }
-              ].map((program, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card 
-                    onClick={program.onClick}
-                    sx={{ 
-                      p: 4,
-                      height: '100%',
-                      background: 'rgba(30, 41, 59, 0.5)',
-                      border: '1px solid rgba(99, 102, 241, 0.2)',
-                      borderRadius: 3,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        background: 'rgba(30, 41, 59, 0.7)',
-                        border: `1px solid ${program.color}`,
-                        boxShadow: `0 8px 24px -4px ${program.color}40`
-                      }
-                    }}
-                  >
-                    <Stack spacing={3} alignItems="center" textAlign="center">
-                      <Box sx={{ 
-                        width: 64, 
-                        height: 64, 
-                        borderRadius: '50%',
-                        background: `${program.color}20`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '2rem'
-                      }}>
-                        {program.icon}
-                      </Box>
-                      <Box>
-                        <Typography 
-                          variant="h5" 
-                          sx={{ 
-                            fontWeight: 700,
-                            color: program.color,
-                            mb: 1
-                          }}
-                        >
-                          {program.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {program.description}
-                        </Typography>
-                      </Box>
-                    </Stack>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-          </Stack>
-        </Container>
+            </CardContent>
+          </Card>
+        ))}
       </Box>
-    </Fade>
+    </Container>
   );
 
   const renderDailyStep = () => (
