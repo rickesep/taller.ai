@@ -31,6 +31,7 @@ import {
   Select,
   MenuItem,
   Link,
+  SelectChangeEvent,
 } from '@mui/material';
 import { useTheme, Theme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
@@ -272,7 +273,7 @@ function App() {
     return Math.min(growthPotential, currentHeight + maxGrowth);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setCurrentStep('analyzing');
     setAnalysisProgress(0);
@@ -431,6 +432,14 @@ function App() {
     }, 5000);
   };
 
+  const handleUnitChange = (event: SelectChangeEvent) => {
+    setFormData({ ...formData, unit: event.target.value as 'cm' | 'in' });
+  };
+
+  const handleGenderChange = (event: SelectChangeEvent) => {
+    setFormData({ ...formData, gender: event.target.value as 'male' | 'female' });
+  };
+
   const renderInputStep = () => (
     <Fade in={currentStep === 'input'}>
       <Paper 
@@ -494,20 +503,6 @@ function App() {
                     }
                   }
                 }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Select
-                        value={formData.unit}
-                        onChange={(e: React.ChangeEvent<{ value: unknown }>) => setFormData({ ...formData, unit: e.target.value as 'cm' | 'in' })}
-                        sx={{ minWidth: 60 }}
-                      >
-                        <MenuItem value="cm">cm</MenuItem>
-                        <MenuItem value="in">in</MenuItem>
-                      </Select>
-                    </InputAdornment>
-                  ),
-                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -569,24 +564,19 @@ function App() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Select
-                fullWidth
                 value={formData.gender}
-                onChange={(e: React.ChangeEvent<{ value: unknown }>) => setFormData({ ...formData, gender: e.target.value as 'male' | 'female' })}
+                onChange={handleGenderChange}
                 sx={{
-                  borderRadius: '12px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(10px)',
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.08)',
+                  color: '#fff',
+                  '.MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'rgba(255, 255, 255, 0.23)',
                   },
-                  '&.Mui-focused': {
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#6366F1',
-                      borderWidth: '2px',
-                    }
-                  }
+                  '&:hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'rgba(255, 255, 255, 0.23)',
+                  },
+                  '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: '#6366F1',
+                  },
                 }}
               >
                 <MenuItem value="male">Male</MenuItem>
@@ -911,6 +901,7 @@ function App() {
         minHeight: '100vh',
         background: `linear-gradient(135deg, #030712 0%, #111827 100%)`,
         position: 'relative',
+        overflowX: 'hidden',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -1166,19 +1157,28 @@ function App() {
 
   const renderWeeklyStep = () => (
     <Fade in={currentStep === 'weekly'}>
-      {/* Weekly step content */}
+      <Box component="div">
+        {/* Weekly content */}
+        <Typography>Weekly Program Content</Typography>
+      </Box>
     </Fade>
   );
 
   const renderNutritionStep = () => (
     <Fade in={currentStep === 'nutrition'}>
-      {/* Nutrition step content */}
+      <Box component="div">
+        {/* Nutrition content */}
+        <Typography>Nutrition Plan Content</Typography>
+      </Box>
     </Fade>
   );
 
   const renderTechniquesStep = () => (
     <Fade in={currentStep === 'techniques'}>
-      {/* Techniques step content */}
+      <Box component="div">
+        {/* Techniques content */}
+        <Typography>Growth Techniques Content</Typography>
+      </Box>
     </Fade>
   );
 
@@ -1222,7 +1222,10 @@ function App() {
 
   const renderSupportStep = () => (
     <Fade in={currentStep === 'support'}>
-      {/* Support step content */}
+      <Box component="div">
+        {/* Support content */}
+        <Typography>Expert Support Content</Typography>
+      </Box>
     </Fade>
   );
 
@@ -1232,6 +1235,7 @@ function App() {
         minHeight: '100vh',
         background: `linear-gradient(135deg, #030712 0%, #111827 100%)`,
         position: 'relative',
+        overflowX: 'hidden',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -1253,14 +1257,22 @@ function App() {
         }
       }}
     >
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Stack spacing={4}>
+      <Container 
+        maxWidth="lg" 
+        sx={{ 
+          py: { xs: 2, sm: 4 },
+          px: { xs: 2, sm: 3, md: 4 }
+        }}
+      >
+        <Stack spacing={{ xs: 2, sm: 4 }}>
           {/* Top Navigation Bar */}
           <Box sx={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
             alignItems: 'center',
-            mb: 6
+            mb: { xs: 3, sm: 6 },
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: { xs: 2, sm: 0 }
           }}>
             <Box sx={{ 
               display: 'flex', 
@@ -1275,12 +1287,14 @@ function App() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 8px 24px -4px rgba(99, 102, 241, 0.3)'
+                  boxShadow: '0 8px 24px -4px rgba(99, 102, 241, 0.3)',
+                  width: { xs: 40, sm: 48 },
+                  height: { xs: 40, sm: 48 }
                 }}
               >
                 <Typography 
                   sx={{ 
-                    fontSize: '1.8rem', 
+                    fontSize: { xs: '1.5rem', sm: '1.8rem' }, 
                     fontWeight: 800,
                     color: '#fff',
                     lineHeight: 1
@@ -1291,7 +1305,7 @@ function App() {
               </Box>
               <Typography 
                 sx={{ 
-                  fontSize: '1.5rem',
+                  fontSize: { xs: '1.2rem', sm: '1.5rem' },
                   fontWeight: 700,
                   background: 'linear-gradient(135deg, #6366F1, #10B981)',
                   WebkitBackgroundClip: 'text',
@@ -1303,15 +1317,17 @@ function App() {
             </Box>
             <Box sx={{ 
               display: 'flex', 
-              gap: 4, 
-              alignItems: 'center'
+              gap: { xs: 2, sm: 4 }, 
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}>
               <Link 
                 href="#" 
                 sx={{ 
                   color: 'rgba(255, 255, 255, 0.8)', 
                   textDecoration: 'none',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.875rem', sm: '0.9rem' },
                   fontWeight: 500,
                   transition: 'all 0.2s ease',
                   '&:hover': { color: '#fff' }
@@ -1324,7 +1340,7 @@ function App() {
                 sx={{ 
                   color: 'rgba(255, 255, 255, 0.8)', 
                   textDecoration: 'none',
-                  fontSize: '0.9rem',
+                  fontSize: { xs: '0.875rem', sm: '0.9rem' },
                   fontWeight: 500,
                   transition: 'all 0.2s ease',
                   '&:hover': { color: '#fff' }
@@ -1338,7 +1354,9 @@ function App() {
                   borderColor: 'rgba(99, 102, 241, 0.5)',
                   color: '#fff',
                   borderRadius: '12px',
-                  px: 3,
+                  px: { xs: 2, sm: 3 },
+                  py: { xs: 0.5, sm: 1 },
+                  fontSize: { xs: '0.875rem', sm: '1rem' },
                   '&:hover': {
                     borderColor: '#6366F1',
                     background: 'rgba(99, 102, 241, 0.1)'
@@ -1352,17 +1370,17 @@ function App() {
 
           {/* Hero Section */}
           {currentStep === 'input' && (
-            <Box sx={{ textAlign: 'center', mb: 8, mt: 4 }}>
+            <Box sx={{ textAlign: 'center', mb: { xs: 4, sm: 8 }, mt: { xs: 2, sm: 4 } }}>
               <Typography 
                 variant="h1" 
                 sx={{ 
                   ...modernTypographyStyles.h1,
-                  fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
+                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem', lg: '4.5rem' },
                   lineHeight: 1.1,
                   background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 50%, #10B981 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
-                  mb: 3,
+                  mb: { xs: 2, sm: 3 },
                   maxWidth: '1000px',
                   mx: 'auto',
                   position: 'relative',
@@ -1384,12 +1402,13 @@ function App() {
               <Typography 
                 sx={{ 
                   ...modernTypographyStyles.body1,
-                  fontSize: { xs: '1.1rem', md: '1.25rem' },
+                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
                   color: 'rgba(255, 255, 255, 0.8)',
                   maxWidth: '800px',
                   mx: 'auto',
-                  mb: 6,
-                  lineHeight: 1.6
+                  mb: { xs: 4, sm: 6 },
+                  lineHeight: 1.6,
+                  px: { xs: 2, sm: 0 }
                 }}
               >
                 Join over 50,000 success stories who have achieved their height goals with our AI-powered optimization system. Start your transformation today.
@@ -1398,11 +1417,11 @@ function App() {
               {/* Stats Section */}
               <Box 
                 sx={{ 
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: { xs: 3, md: 6 },
-                  flexWrap: 'wrap',
-                  mb: 6
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
+                  gap: { xs: 2, sm: 3, md: 6 },
+                  mb: { xs: 4, sm: 6 },
+                  px: { xs: 1, sm: 0 }
                 }}
               >
                 {[
@@ -1420,8 +1439,8 @@ function App() {
                       background: 'rgba(255, 255, 255, 0.03)',
                       backdropFilter: 'blur(10px)',
                       borderRadius: '16px',
-                      px: 4,
-                      py: 2,
+                      px: { xs: 2, sm: 3, md: 4 },
+                      py: { xs: 1.5, sm: 2 },
                       border: '1px solid rgba(255, 255, 255, 0.1)',
                       transition: 'all 0.3s ease',
                       '&:hover': {
@@ -1435,7 +1454,7 @@ function App() {
                       variant="h3" 
                       sx={{ 
                         fontWeight: 700,
-                        fontSize: { xs: '2rem', md: '2.5rem' },
+                        fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.5rem' },
                         background: 'linear-gradient(135deg, #6366F1, #10B981)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
@@ -1447,7 +1466,7 @@ function App() {
                     <Typography 
                       sx={{ 
                         color: 'rgba(255, 255, 255, 0.6)',
-                        fontSize: '0.9rem',
+                        fontSize: { xs: '0.75rem', sm: '0.875rem', md: '0.9rem' },
                         fontWeight: 500
                       }}
                     >
@@ -1459,10 +1478,12 @@ function App() {
 
               {/* Trust Badges */}
               <Box sx={{ 
-                display: 'flex',
-                justifyContent: 'center',
-                gap: { xs: 2, md: 4 },
-                flexWrap: 'wrap'
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
+                gap: { xs: 1, sm: 2, md: 4 },
+                maxWidth: '800px',
+                mx: 'auto',
+                px: { xs: 1, sm: 0 }
               }}>
                 {[
                   { icon: '🔒', text: 'HIPAA Compliant' },
@@ -1479,16 +1500,21 @@ function App() {
                       background: 'rgba(255, 255, 255, 0.03)',
                       backdropFilter: 'blur(10px)',
                       borderRadius: '12px',
-                      px: 2,
-                      py: 1,
-                      border: '1px solid rgba(255, 255, 255, 0.1)'
+                      px: { xs: 1.5, sm: 2 },
+                      py: { xs: 1, sm: 1.5 },
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        transform: 'translateY(-2px)'
+                      }
                     }}
                   >
-                    <Typography sx={{ fontSize: '1.2rem' }}>{badge.icon}</Typography>
+                    <Typography sx={{ fontSize: { xs: '1rem', sm: '1.2rem' } }}>{badge.icon}</Typography>
                     <Typography 
                       sx={{ 
                         color: 'rgba(255, 255, 255, 0.8)',
-                        fontSize: '0.875rem',
+                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
                         fontWeight: 500
                       }}
                     >
@@ -1519,39 +1545,80 @@ function App() {
               bottom: 0,
               left: 0,
               right: 0,
-              p: 2,
+              p: { xs: 1, sm: 2 },
               background: 'rgba(17, 24, 39, 0.9)',
               backdropFilter: 'blur(20px)',
               borderTop: '1px solid rgba(99, 102, 241, 0.2)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              zIndex: 1000
+              zIndex: 1000,
+              flexDirection: { xs: 'column', sm: 'row' },
+              gap: { xs: 1, sm: 0 }
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 2,
+              order: { xs: 2, sm: 1 }
+            }}>
               <Box 
                 component="img"
                 src="/taller-ai-logo.png"
                 alt="Taller.AI"
                 sx={{ 
-                  height: 24,
+                  height: { xs: 20, sm: 24 },
                   filter: 'brightness(0) invert(1)',
                   opacity: 0.8
                 }}
               />
-              <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: 'rgba(255, 255, 255, 0.6)',
+                  fontSize: { xs: '0.75rem', sm: '0.875rem' }
+                }}
+              >
                 © 2024 Taller.AI - All rights reserved
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', gap: 3 }}>
-              <Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.6)', textDecoration: 'none', '&:hover': { color: '#fff' } }}>
+            <Box sx={{ 
+              display: 'flex', 
+              gap: { xs: 1.5, sm: 3 },
+              order: { xs: 1, sm: 2 }
+            }}>
+              <Link 
+                href="#" 
+                sx={{ 
+                  color: 'rgba(255, 255, 255, 0.6)', 
+                  textDecoration: 'none', 
+                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                  '&:hover': { color: '#fff' } 
+                }}
+              >
                 Privacy Policy
               </Link>
-              <Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.6)', textDecoration: 'none', '&:hover': { color: '#fff' } }}>
+              <Link 
+                href="#" 
+                sx={{ 
+                  color: 'rgba(255, 255, 255, 0.6)', 
+                  textDecoration: 'none',
+                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                  '&:hover': { color: '#fff' } 
+                }}
+              >
                 Terms of Service
               </Link>
-              <Link href="#" sx={{ color: 'rgba(255, 255, 255, 0.6)', textDecoration: 'none', '&:hover': { color: '#fff' } }}>
+              <Link 
+                href="#" 
+                sx={{ 
+                  color: 'rgba(255, 255, 255, 0.6)', 
+                  textDecoration: 'none',
+                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                  '&:hover': { color: '#fff' } 
+                }}
+              >
                 Contact
               </Link>
             </Box>
