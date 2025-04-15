@@ -11,6 +11,8 @@ const styles = `
   body {
     overflow-y: overlay;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
   }
 
   ::-webkit-scrollbar {
@@ -19,60 +21,40 @@ const styles = `
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
   }
-`;
+`
 
-const styleSheet = document.createElement("style");
-styleSheet.innerText = styles;
-document.head.appendChild(styleSheet);
+// Create a style element and append it to the head
+const styleSheet = document.createElement('style')
+styleSheet.textContent = styles
+document.head.appendChild(styleSheet)
 
-const darkTheme = createTheme({
+// Create a theme
+const theme = createTheme({
   palette: {
-    mode: 'dark',
     primary: {
       main: '#6366F1',
     },
     secondary: {
-      main: '#10B981',
-    },
-    background: {
-      default: '#030712',
-      paper: 'rgba(17, 24, 39, 0.8)',
-    },
-    text: {
-      primary: '#fff',
-      secondary: 'rgba(255, 255, 255, 0.7)',
+      main: '#4F46E5',
     },
   },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-        },
-      },
-    },
+  typography: {
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   },
-});
+})
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <App />
     </ThemeProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
