@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --base=/taller.ai/",
     "preview": "vite preview"
   },
   "dependencies": {
