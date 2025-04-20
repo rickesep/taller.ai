@@ -32,7 +32,7 @@ import {
   MenuItem,
   Link,
 } from '@mui/material';
-import { useTheme, Theme } from '@mui/material/styles';
+import { useTheme, Theme, ThemeProvider, createTheme } from '@mui/material/styles';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { Person, Lock, Email } from '@mui/icons-material';
 
@@ -87,8 +87,18 @@ type Result = {
   plans: Record<string, PlanCategory>;
 };
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2196f3',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+  },
+});
+
 function App() {
-  const theme = useTheme();
   const [currentStep, setCurrentStep] = useState<Step>('input');
   const [formData, setFormData] = useState<FormData>({
     height: '',
@@ -1228,402 +1238,38 @@ function App() {
   );
 
   return (
-    <Box 
-      sx={{
-        minHeight: '100vh',
-        background: `linear-gradient(135deg, #030712 0%, #111827 100%)`,
-        position: 'relative',
-        overflowX: 'hidden',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '100%',
-          background: 'radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%)',
-          pointerEvents: 'none',
-          animation: 'pulse 8s ease-in-out infinite'
-        },
-        '@keyframes pulse': {
-          '0%, 100%': {
-            opacity: 0.5,
-          },
-          '50%': {
-            opacity: 0.8,
-          },
-        }
-      }}
-    >
-      <Container 
-        maxWidth="lg" 
-        sx={{ 
-          py: { xs: 2, sm: 4 },
-          px: { xs: 2, sm: 3, md: 4 }
-        }}
-      >
-        <Stack spacing={{ xs: 2, sm: 4 }}>
-          {/* Top Navigation Bar */}
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            mb: { xs: 3, sm: 6 },
-            flexDirection: { xs: 'column', sm: 'row' },
-            gap: { xs: 2, sm: 0 }
-          }}>
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 2,
-            }}>
-              <Box 
-                sx={{
-                  background: 'linear-gradient(135deg, #6366F1, #10B981)',
-                  borderRadius: '12px',
-                  p: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 8px 24px -4px rgba(99, 102, 241, 0.3)',
-                  width: { xs: 40, sm: 48 },
-                  height: { xs: 40, sm: 48 }
-                }}
-              >
-                <Typography 
-                  sx={{ 
-                    fontSize: { xs: '1.5rem', sm: '1.8rem' }, 
-                    fontWeight: 800,
-                    color: '#fff',
-                    lineHeight: 1
-                  }}
-                >
-                  T
-                </Typography>
-              </Box>
-              <Typography 
-                sx={{ 
-                  fontSize: { xs: '1.2rem', sm: '1.5rem' },
-                  fontWeight: 700,
-                  background: 'linear-gradient(135deg, #6366F1, #10B981)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent'
-                }}
-              >
-                Taller.AI
-              </Typography>
-            </Box>
-            <Box sx={{ 
-              display: 'flex', 
-              gap: { xs: 2, sm: 4 }, 
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}>
-              <Link 
-                href="#" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.8)', 
-                  textDecoration: 'none',
-                  fontSize: { xs: '0.875rem', sm: '0.9rem' },
-                  fontWeight: 500,
-                  transition: 'all 0.2s ease',
-                  '&:hover': { color: '#fff' }
-                }}
-              >
-                Success Stories
-              </Link>
-              <Link 
-                href="#" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.8)', 
-                  textDecoration: 'none',
-                  fontSize: { xs: '0.875rem', sm: '0.9rem' },
-                  fontWeight: 500,
-                  transition: 'all 0.2s ease',
-                  '&:hover': { color: '#fff' }
-                }}
-              >
-                How It Works
-              </Link>
-              <Button
-                variant="outlined"
-                sx={{
-                  borderColor: 'rgba(99, 102, 241, 0.5)',
-                  color: '#fff',
-                  borderRadius: '12px',
-                  px: { xs: 2, sm: 3 },
-                  py: { xs: 0.5, sm: 1 },
-                  fontSize: { xs: '0.875rem', sm: '1rem' },
-                  '&:hover': {
-                    borderColor: '#6366F1',
-                    background: 'rgba(99, 102, 241, 0.1)'
-                  }
-                }}
-              >
-                Login
-              </Button>
-            </Box>
+    <ThemeProvider theme={theme}>
+      <Container maxWidth="lg">
+        {currentStep === 'home' && (
+          <Box sx={{ textAlign: 'center', py: 8 }}>
+            <Typography variant="h2" component="h1" gutterBottom>
+              Welcome to TallerAI
+            </Typography>
+            <Typography variant="h5" component="h2" gutterBottom color="text.secondary">
+              Your Personal Height Growth Journey
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => setCurrentStep('program')}
+              sx={{ mt: 4 }}
+            >
+              Start Your Growth Journey Now
+            </Button>
           </Box>
-
-          {/* Hero Section */}
-          {currentStep === 'input' && (
-            <Box sx={{ textAlign: 'center', mb: { xs: 4, sm: 8 }, mt: { xs: 2, sm: 4 } }}>
-              <Typography 
-                variant="h1" 
-                sx={{ 
-                  ...modernTypographyStyles.h1,
-                  fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem', lg: '4.5rem' },
-                  lineHeight: 1.1,
-                  background: 'linear-gradient(135deg, #6366F1 0%, #4F46E5 50%, #10B981 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  mb: { xs: 2, sm: 3 },
-                  maxWidth: '1000px',
-                  mx: 'auto',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: '-16px',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '120px',
-                    height: '4px',
-                    background: 'linear-gradient(90deg, #6366F1, #10B981)',
-                    borderRadius: '2px'
-                  }
-                }}
-              >
-                Maximize Your Height Potential
-              </Typography>
-              <Typography 
-                sx={{ 
-                  ...modernTypographyStyles.body1,
-                  fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  maxWidth: '800px',
-                  mx: 'auto',
-                  mb: { xs: 4, sm: 6 },
-                  lineHeight: 1.6,
-                  px: { xs: 2, sm: 0 }
-                }}
-              >
-                Join over 50,000 success stories who have achieved their height goals with our AI-powered optimization system. Start your transformation today.
-              </Typography>
-
-              {/* Stats Section */}
-              <Box 
-                sx={{ 
-                  display: 'grid',
-                  gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
-                  gap: { xs: 2, sm: 3, md: 6 },
-                  mb: { xs: 4, sm: 6 },
-                  px: { xs: 1, sm: 0 }
-                }}
-              >
-                {[
-                  { number: '50K+', label: 'Success Stories' },
-                  { number: '92%', label: 'Success Rate' },
-                  { number: '4.9/5', label: 'User Rating' },
-                  { number: '2-6"', label: 'Avg. Growth' }
-                ].map((stat, index) => (
-                  <Box 
-                    key={index}
-                    sx={{
-                      textAlign: 'center',
-                      animation: 'fadeInUp 0.5s ease-out',
-                      animationDelay: `${index * 0.1}s`,
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      backdropFilter: 'blur(10px)',
-                      borderRadius: '16px',
-                      px: { xs: 2, sm: 3, md: 4 },
-                      py: { xs: 1.5, sm: 2 },
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(99, 102, 241, 0.3)'
-                      }
-                    }}
-                  >
-                    <Typography 
-                      variant="h3" 
-                      sx={{ 
-                        fontWeight: 700,
-                        fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem', lg: '2.5rem' },
-                        background: 'linear-gradient(135deg, #6366F1, #10B981)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        mb: 1
-                      }}
-                    >
-                      {stat.number}
-                    </Typography>
-                    <Typography 
-                      sx={{ 
-                        color: 'rgba(255, 255, 255, 0.6)',
-                        fontSize: { xs: '0.75rem', sm: '0.875rem', md: '0.9rem' },
-                        fontWeight: 500
-                      }}
-                    >
-                      {stat.label}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-
-              {/* Trust Badges */}
-              <Box sx={{ 
-                display: 'grid',
-                gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
-                gap: { xs: 1, sm: 2, md: 4 },
-                maxWidth: '800px',
-                mx: 'auto',
-                px: { xs: 1, sm: 0 }
-              }}>
-                {[
-                  { icon: '🔒', text: 'HIPAA Compliant' },
-                  { icon: '🧬', text: 'Scientifically Proven' },
-                  { icon: '⚡', text: 'Real-Time AI Analysis' },
-                  { icon: '✨', text: 'Natural Methods' }
-                ].map((badge, index) => (
-                  <Box 
-                    key={index}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      backdropFilter: 'blur(10px)',
-                      borderRadius: '12px',
-                      px: { xs: 1.5, sm: 2 },
-                      py: { xs: 1, sm: 1.5 },
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      transition: 'all 0.2s ease',
-                      '&:hover': {
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        transform: 'translateY(-2px)'
-                      }
-                    }}
-                  >
-                    <Typography sx={{ fontSize: { xs: '1rem', sm: '1.2rem' } }}>{badge.icon}</Typography>
-                    <Typography 
-                      sx={{ 
-                        color: 'rgba(255, 255, 255, 0.8)',
-                        fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                        fontWeight: 500
-                      }}
-                    >
-                      {badge.text}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          )}
-
-          {/* Main Content */}
-          {currentStep === 'input' && renderInputStep()}
-          {currentStep === 'analyzing' && renderAnalyzingStep()}
-          {currentStep === 'potential' && renderPotentialStep()}
-          {currentStep === 'program' && renderProgramStep()}
-          {currentStep === 'daily' && renderDailyStep()}
-          {currentStep === 'weekly' && renderWeeklyStep()}
-          {currentStep === 'nutrition' && renderNutritionStep()}
-          {currentStep === 'techniques' && renderTechniquesStep()}
-          {currentStep === 'progress' && renderProgressStep()}
-          {currentStep === 'support' && renderSupportStep()}
-
-          {/* Footer */}
-          <Box 
-            sx={{ 
-              position: 'fixed',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              p: { xs: 1, sm: 2 },
-              background: 'rgba(17, 24, 39, 0.9)',
-              backdropFilter: 'blur(20px)',
-              borderTop: '1px solid rgba(99, 102, 241, 0.2)',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              zIndex: 1000,
-              flexDirection: { xs: 'column', sm: 'row' },
-              gap: { xs: 1, sm: 0 }
-            }}
-          >
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 2,
-              order: { xs: 2, sm: 1 }
-            }}>
-              <Box 
-                component="img"
-                src="/taller-ai-logo.png"
-                alt="Taller.AI"
-                sx={{ 
-                  height: { xs: 20, sm: 24 },
-                  filter: 'brightness(0) invert(1)',
-                  opacity: 0.8
-                }}
-              />
-              <Typography 
-                variant="caption" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.6)',
-                  fontSize: { xs: '0.75rem', sm: '0.875rem' }
-                }}
-              >
-                © 2024 Taller.AI - All rights reserved
-              </Typography>
-            </Box>
-            <Box sx={{ 
-              display: 'flex', 
-              gap: { xs: 1.5, sm: 3 },
-              order: { xs: 1, sm: 2 }
-            }}>
-              <Link 
-                href="#" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.6)', 
-                  textDecoration: 'none', 
-                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                  '&:hover': { color: '#fff' } 
-                }}
-              >
-                Privacy Policy
-              </Link>
-              <Link 
-                href="#" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.6)', 
-                  textDecoration: 'none',
-                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                  '&:hover': { color: '#fff' } 
-                }}
-              >
-                Terms of Service
-              </Link>
-              <Link 
-                href="#" 
-                sx={{ 
-                  color: 'rgba(255, 255, 255, 0.6)', 
-                  textDecoration: 'none',
-                  fontSize: { xs: '0.75rem', sm: '0.875rem' },
-                  '&:hover': { color: '#fff' } 
-                }}
-              >
-                Contact
-              </Link>
-            </Box>
-          </Box>
-        </Stack>
+        )}
+        {currentStep === 'input' && renderInputStep()}
+        {currentStep === 'analyzing' && renderAnalyzingStep()}
+        {currentStep === 'potential' && renderPotentialStep()}
+        {currentStep === 'program' && renderProgramStep()}
+        {currentStep === 'daily' && renderDailyStep()}
+        {currentStep === 'weekly' && renderWeeklyStep()}
+        {currentStep === 'nutrition' && renderNutritionStep()}
+        {currentStep === 'techniques' && renderTechniquesStep()}
+        {currentStep === 'progress' && renderProgressStep()}
+        {currentStep === 'support' && renderSupportStep()}
       </Container>
-    </Box>
+    </ThemeProvider>
   );
 }
 
